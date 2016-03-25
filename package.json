@@ -1,0 +1,40 @@
+{
+  "name": "jscas-ad-auth",
+  "version": "0.1.0",
+  "description": "An Active Directory authentication provider for cas-server",
+  "main": "plugin.js",
+  "scripts": {
+    "test": "mocha --ui qunit test"
+  },
+  "keywords": [
+    "cas",
+    "cas-server",
+    "cas-server-plugin",
+    "apereo",
+    "jasig",
+    "activedirectory"
+  ],
+  "author": "James Sumners",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jscas/jscas-ad-auth.git"
+  },
+  "bugs": "https://github.com/jscas/jscas-ad-auth/issues",
+  "homepage": "https://github.com/jscac/jscas-ad-auth",
+  "dependencies": {
+    "activedirectory2": "^1.0.0",
+    "joi": "^8.0.0",
+    "then-yield": "0.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "gulp": "^3.9.1",
+    "gulp-jscs": "^3.0.2",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-mocha": "^2.2.0",
+    "jscs": "^2.11.0",
+    "jscs-preset-jsumners": "^0.1.0",
+    "mocha": "^2.3.4"
+  }
+}
