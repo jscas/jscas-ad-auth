@@ -12,15 +12,14 @@ The module requires a configuration object matching:
 ```javascript
 {
   ad: { // required
-    url: '(ldap|ldaps)://active.directory.server', // required
-    baseDN: 'dc=example,dc=com', // required
-    username: 'cn=jsmith,ou=users,dc=example,dc=com', // required
-    password: 'jsmith_password', // required
-    scope: 'base', // 'base', 'one', 'sub' default: 'sub'
-    includeMembership: ['user', 'group', 'all'], // optional, default: not set
-    attributes: { // optional
-      user: [], // optional
-      group: [] // optional
+    searchUser: 'cn=jsmith,ou=users,dc=example,dc=com', // required
+    searchPass: 'jsmith_password', // required
+    ldapjs: {
+      url: '(ldap|ldaps)://active.directory.server', // required
+      searchBase: 'dc=example,dc=com', // required
+      scope: 'base', // 'base', 'one', 'sub' default: 'sub'
+      attributes: [ 'dn', 'cn', 'sn', 'givenName', 'mail', 'memberOf' ] // optional
+      }
     }
   },
   attributesMap: { // optional
@@ -38,57 +37,36 @@ to the AD module as-is.
 
 [admod]: https://www.npmjs.com/package/activedirectory
 
-#### ad.url
+#### ad.searchUser
+
+The username the AD module will use to bind to the server for search operations.
+
+#### ad.searchUserPass
+
+The password for `ad.searchUser`.
+
+#### ad.ldapjs.url
 
 An LDAP URL pointing to your Active Directory server. This property is
 required.
 
-#### ad.baseDN
+#### ad.ldapjs.searchBase
 
 The DN under which all search queries will be performed. This includes
 authentications.
 
-#### ad.username
-
-The username the AD module will use to bind to the server for search operations.
-
-#### ad.password
-
-The password for `ad.username`.
-
-#### ad.scope
+#### ad.ldapjs.scope
 
 The search method to use. This module's default is `'sub'`.
 
-#### ad.includeMembership
+#### ad.ldapjs.attributes
 
-Enables returning groups in user searches. Without this option set you will
-not get a `memberOf` property back. A sensible default is `['group']`.
-
-#### ad.attributes.user
-
-An array of attributes to include in search results for a user. These will
+An array of attributes to include in search results. These will
 be used by *cas-server* as extra attributes during CAS 3.0 authentication. The
 default attribute set is:
 
 ```javascript
-[
-  userPrincipalName, sAMAccountName, mail, lockoutTime, whenCreated, pwdLastSet,
-  userAccountControl, employeeID, sn, givenName, initials, cn, displayName,
-  comment, description
-]
-```
-
-#### ad.attributes.group
-
-An array of group names (the AD "memberOf" attribute) to return in search
-results for a user. These will be used by *cas-server* as the `memberOf`
-extra attribute during CAS 3.0 authentication. The default group set is:
-
-```javascript
-[
-  distinguishedName, objectCategory, cn, description
-]
+[ 'dn', 'cn', 'sn', 'givenName', 'mail', 'memberOf' ]
 ```
 
 #### attributesMap.user
