@@ -5,14 +5,13 @@ module.exports = {
   },
   plugin: {
     ad: {
-      url: 'ldap://ldap.example.com',
-      baseDN: 'dc=example,dc=com',
-      username: 'CN=Directory Reader,cn=Users,DC=example,DC=com',
-      password: 'reall_super_secret',
-      scope: 'sub',
-      includeMembership: ['all'],
-      attributes: {
-        user: ['dn', 'givenName', 'sn', 'sAMAccountName', 'mail']
+      searchUser: 'CN=Directory Reader,cn=Users,DC=example,DC=com',
+      searchUserPassword: 'reall_super_secret',
+      ldapjs: {
+        url: 'ldap://ldap.example.com',
+        searchBase: 'dc=example,dc=com',
+        scope: 'sub',
+        attributes: ['dn', 'givenName', 'sn', 'sAMAccountName', 'mail']
       }
     },
     attributesMap: {

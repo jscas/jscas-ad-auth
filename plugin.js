@@ -1,7 +1,7 @@
 'use strict';
 
 const Joi = require('joi');
-const AD = require('activedirectory2').promiseWrapper;
+const AD = require('adldap')();
 const ty = require('then-yield');
 let ad;
 let config;
@@ -9,17 +9,14 @@ let log;
 
 const configSchema = Joi.object().keys({
   ad: Joi.object().keys({
-    url: Joi.string().uri({scheme: ['ldap', 'ldaps']}).required(),
-    baseDN: Joi.string().required(),
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-    scope: Joi.string().allow(['base', 'one', 'sub']).default('sub'),
-    includeMembership: Joi.array().items(['user', 'group', 'all'])
-      .optional(),
-    attributes: Joi.object().keys({
-      user: Joi.array().items(Joi.string()).optional(),
-      group: Joi.array().items(Joi.string()).optional()
-    }).optional()
+    searchUser: Joi.string().required(),
+    searchUserPass: Joi.string().required(),
+    ldapjs: Joi.object().keys({
+      url: Joi.string().uri({scheme: ['ldap', 'ldaps']}).required(),
+      scope: Joi.string().allow(['base', 'one', 'sub']).default('sub'),
+      searchBase: Joi.string(),
+      attributes: Joi.array().optional()
+    })
   }).required(),
   attributesMap: Joi.object().keys({
     user: Joi.object().optional(),
@@ -54,27 +51,21 @@ function remapGroupNames(map, groups) {
 function validate(username, password) {
   log.debug('validating user: %s', username);
   return ty.spawn(function* validator() {
-    const user = yield ad.findUser({attributes: ['dn']}, username);
-    log.debug('user dn: %j', user);
-    if (!user) {
-      log.error('could not find user: %s', username);
-      return false;
-    }
-
-    const isValid = yield ad.authenticate(user.dn, password);
+    ad = new AD(config.ad);
+    yield ad.bind();
+    const isValid = yield ad.authenticate(username, password);
     log.debug('credential validation result: %s', isValid);
+    yield ad.unbind();
     return isValid;
   });
 }
 
 function userAttributes(user) {
   function* getAttributes() {
-    const adUser = yield ad.findUser(
-      {
-        includeMembership: config.ad.includeMembership
-      },
-      user
-    );
+    ad = new AD(config.ad);
+    yield ad.bind();
+    const adUser = yield ad.findUser(user);
+    yield ad.unbind();
     log.debug('got user: %j', adUser);
     if (!adUser) {
       log.error('could not get attributes for user');
@@ -82,18 +73,6 @@ function userAttributes(user) {
     }
 
     let result = {extraAttributes: {}};
-    const updateGroups = () => {
-      log.debug('checking for groups');
-      if (adUser.hasOwnProperty('groups')) {
-        // CAS users 'memberOf' instead of 'groups'
-        log.debug('re-assigning groups to memberOf');
-        result.memberOf = adUser.groups;
-        delete adUser.groups;
-      }
-      result = Object.assign(result, adUser);
-    };
-
-
     if (config.hasOwnProperty('attributesMap')) {
       log.debug('processing attributesMap setting');
       // rename attributes as per configuration
@@ -106,16 +85,12 @@ function userAttributes(user) {
 
       // rename groups as per configuration
       if (config.attributesMap.hasOwnProperty('group') &&
-        adUser.hasOwnProperty('groups'))
+        adUser.hasOwnProperty('memberOf'))
       {
         log.debug('remapping groups');
         result.memberOf =
-          remapGroupNames(config.attributesMap.group, adUser.groups);
-      } else {
-        updateGroups();
+          remapGroupNames(config.attributesMap.group, adUser.memberOf);
       }
-    } else {
-      updateGroups();
     }
 
     log.debug('user attributes: %j', result);
@@ -135,7 +110,6 @@ module.exports.plugin = function plugin(conf, context) {
   }
 
   config = joiResult.value;
-  ad = new AD(config.ad);
   log.info('adauth loaded');
   return {validate};
 };
