@@ -23,7 +23,7 @@
   "bugs": "https://github.com/jscas/jscas-ad-auth/issues",
   "homepage": "https://github.com/jscac/jscas-ad-auth",
   "dependencies": {
-    "activedirectory2": "^1.0.0",
+    "adldap": "^0.1.1",
     "joi": "^8.0.0",
     "then-yield": "0.0.1"
   },
