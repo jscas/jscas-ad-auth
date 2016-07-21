@@ -51,12 +51,12 @@ function remapGroupNames (map, groups) {
 }
 
 function validate (username, password) {
-  log.debug('validating user: %s', username)
+  log.trace('validating user: %s', username)
   return Promise.coroutine(function * validator () {
     ad = new AD(config.ad)
     yield ad.bind()
     const isValid = yield ad.authenticate(username, password)
-    log.debug('credential validation result: %s', isValid)
+    log.trace('credential validation result: %s', isValid)
     yield ad.unbind()
     return isValid
   })()
@@ -68,7 +68,7 @@ function userAttributes (user) {
     yield ad.bind()
     const adUser = yield ad.findUser(user)
     yield ad.unbind()
-    log.debug('got user: %j', adUser)
+    log.trace('got user: %j', adUser)
     if (!adUser) {
       log.error('could not get attributes for user')
       return {extraAttributes: {}}
@@ -76,10 +76,10 @@ function userAttributes (user) {
 
     let result = {extraAttributes: {}}
     if (config.hasOwnProperty('attributesMap')) {
-      log.debug('processing attributesMap setting')
+      log.trace('processing attributesMap setting')
       // rename attributes as per configuration
       if (config.attributesMap.hasOwnProperty('user')) {
-        log.debug('remapping attributes')
+        log.trace('remapping attributes')
         result = Object.assign(
           remapAttributes(config.attributesMap.user, adUser)
         )
@@ -87,13 +87,13 @@ function userAttributes (user) {
 
       // rename groups as per configuration
       if (config.attributesMap.hasOwnProperty('group') && adUser.hasOwnProperty('memberOf')) {
-        log.debug('remapping groups')
+        log.trace('remapping groups')
         result.memberOf =
           remapGroupNames(config.attributesMap.group, adUser.memberOf)
       }
     }
 
-    log.debug('user attributes: %j', result)
+    log.trace('user attributes: %j', result)
     return {extraAttributes: result}
   }
 

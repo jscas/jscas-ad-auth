@@ -9,6 +9,7 @@ const adauth = require(path.join(__dirname, '..', 'plugin'))
 
 function noop () {}
 const logger = {
+  trace: noop,
   debug: noop,
   error: noop,
   info: noop
