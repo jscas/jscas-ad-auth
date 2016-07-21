@@ -17,7 +17,6 @@ const logger = {
 const plugin = adauth.plugin(config.plugin, {logger})
 
 suite('integration', function () {
-
   test('validate credentials', function find (done) {
     plugin.validate(config.user.username, config.user.password)
       .then((result) => {
