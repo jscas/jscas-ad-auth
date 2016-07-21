@@ -1,8 +1,10 @@
 'use strict'
 
+const Promise = require('bluebird')
+require('bluebird-co')
+
 const Joi = require('joi')
 const AD = require('adldap')()
-const ty = require('then-yield')
 let ad
 let config
 let log
@@ -50,14 +52,14 @@ function remapGroupNames (map, groups) {
 
 function validate (username, password) {
   log.debug('validating user: %s', username)
-  return ty.spawn(function * validator () {
+  return Promise.coroutine(function * validator () {
     ad = new AD(config.ad)
     yield ad.bind()
     const isValid = yield ad.authenticate(username, password)
     log.debug('credential validation result: %s', isValid)
     yield ad.unbind()
     return isValid
-  })
+  })()
 }
 
 function userAttributes (user) {
@@ -95,7 +97,7 @@ function userAttributes (user) {
     return {extraAttributes: result}
   }
 
-  return ty.spawn(getAttributes)
+  return Promise.coroutine(getAttributes)()
 }
 
 module.exports.name = 'adauth'
