@@ -1,8 +1,9 @@
 'use strict'
 /* eslint-env node, mocha */
 
+const path = require('path')
 const expect = require('chai').expect
-const plugin = require(__dirname + '/../plugin')
+const plugin = require(path.join(__dirname, '..', 'plugin'))
 const cntxt = {
   logger: {
     debug: console.debug,
@@ -31,13 +32,12 @@ suite('plugin', function () {
   })
 
   suite('internals', function () {
-
     test('remaps attribute names', function remapattrs (done) {
       const input = {
         foo: 'bar',
         baz: 'foo',
         same: 'same',
-        groups: [],
+        groups: []
       }
       const map = {
         foo: 'foobar',
