@@ -30,11 +30,12 @@
   "devDependencies": {
     "chai": "^3.4.1",
     "gulp": "^3.9.1",
-    "gulp-jscs": "^3.0.2",
+    "gulp-istanbul": "^1.0.0",
     "gulp-load-plugins": "^1.2.0",
     "gulp-mocha": "^2.2.0",
-    "jscs": "^2.11.0",
-    "jscs-preset-jsumners": "^0.1.0",
-    "mocha": "^2.3.4"
+    "gulp-standard": "^7.0.1",
+    "istanbul": "^0.4.4",
+    "mocha": "^2.3.4",
+    "pre-commit": "^1.1.3"
   }
 }
