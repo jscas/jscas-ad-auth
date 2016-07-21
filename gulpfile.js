@@ -1,17 +1,32 @@
-'use strict';
+'use strict'
 
-const gulp = require('gulp');
-const $ = require('gulp-load-plugins')();
+const gulp = require('gulp')
+const $ = require('gulp-load-plugins')()
 
-gulp.task('validate', () =>
-  gulp.src('plugin.js')
-    .pipe($.jscs())
-    .pipe($.jscs.reporter('inline'))
-    .pipe($.jscs.reporter('fail'))
-);
+const srcIncludes = [
+  'plugin.js',
+  'test/*.js'
+]
 
-gulp.task('test', ['validate'], () =>
-  gulp.src('test/*.js').pipe($.mocha({ui: 'qunit', reporter: 'min'}))
-);
+gulp.task('lint', function lintTask () {
+  return gulp
+    .src(srcIncludes)
+    .pipe($.standard())
+    .pipe($.standard.reporter('default', { breakOnError: true }))
+})
 
-gulp.task('default', ['test']);
+gulp.task('pre-test', function preTest () {
+  return gulp
+    .src(srcIncludes)
+    .pipe($.istanbul())
+    .pipe($.istanbul.hookRequire())
+})
+
+gulp.task('test', ['pre-test'], function testTask () {
+  return gulp
+    .src(['test/*.js'])
+    .pipe($.mocha({ui: 'tdd', reporter: 'min'}))
+    .pipe($.istanbul.writeReports())
+})
+
+gulp.task('default', ['test'])

@@ -1,11 +1,16 @@
 {
   "name": "jscas-ad-auth",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An Active Directory authentication provider for cas-server",
   "main": "plugin.js",
   "scripts": {
-    "test": "mocha --ui qunit test"
+    "lint": "gulp lint",
+    "test": "gulp test"
   },
+  "precommit": [
+    "lint",
+    "test"
+  ],
   "keywords": [
     "cas",
     "cas-server",
@@ -23,18 +28,20 @@
   "bugs": "https://github.com/jscas/jscas-ad-auth/issues",
   "homepage": "https://github.com/jscac/jscas-ad-auth",
   "dependencies": {
-    "adldap": "^0.1.1",
-    "joi": "^8.0.0",
-    "then-yield": "0.0.1"
+    "adldap": "^1.0.0",
+    "bluebird": "^3.4.1",
+    "bluebird-co": "^2.1.2",
+    "joi": "^9.0.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",
     "gulp": "^3.9.1",
-    "gulp-jscs": "^3.0.2",
-    "gulp-load-plugins": "^1.2.0",
+    "gulp-istanbul": "^1.0.0",
+    "gulp-load-plugins": "^1.2.4",
     "gulp-mocha": "^2.2.0",
-    "jscs": "^2.11.0",
-    "jscs-preset-jsumners": "^0.1.0",
-    "mocha": "^2.3.4"
+    "gulp-standard": "^7.0.1",
+    "istanbul": "^0.4.4",
+    "mocha": "^2.5.3",
+    "pre-commit": "^1.1.3"
   }
 }
