@@ -4,7 +4,7 @@ const Promise = require('bluebird')
 require('bluebird-co')
 
 const Joi = require('joi')
-const AD = require('adldap')()
+let AD
 let ad
 let config
 let log
@@ -103,6 +103,7 @@ function userAttributes (user) {
 module.exports.name = 'adauth'
 module.exports.plugin = function plugin (conf, context) {
   log = context.logger
+  AD = require('adldap')(log)
   const joiResult = Joi.validate(conf, configSchema)
   if (joiResult.error) {
     log.error('invalid config: %s', joiResult.error.message)
