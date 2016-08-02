@@ -14,6 +14,7 @@ const logger = {
   error: noop,
   info: noop
 }
+logger.child = () => logger
 const plugin = adauth.plugin(config.plugin, {logger})
 
 suite('integration', function () {
