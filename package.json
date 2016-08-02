@@ -28,7 +28,7 @@
   "bugs": "https://github.com/jscas/jscas-ad-auth/issues",
   "homepage": "https://github.com/jscac/jscas-ad-auth",
   "dependencies": {
-    "adldap": "^1.0.0",
+    "adldap": "^1.0.1",
     "bluebird": "^3.4.1",
     "bluebird-co": "^2.1.2",
     "joi": "^9.0.1"
