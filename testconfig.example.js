@@ -1,6 +1,7 @@
 module.exports = {
   user: { // to query for
     username: 'some_user',
+    junkname: 'some_user_with_junk_appended',
     password: 'super_secret'
   },
   plugin: {

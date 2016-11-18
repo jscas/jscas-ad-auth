@@ -36,6 +36,15 @@ suite('integration', function () {
       .catch(done)
   })
 
+  test('invalid username', function invalidUsername (done) {
+    plugin.validate(config.user.junkname, config.user.password)
+      .then((result) => {
+        expect(result).to.be.false
+        done()
+      })
+      .catch(done)
+  })
+
   test('get attributes', function attrs (done) {
     adauth.postInit()
       .then((res) => {
