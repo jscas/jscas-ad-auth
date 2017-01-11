@@ -22,6 +22,7 @@ The module requires a configuration object matching:
       }
     }
   },
+  allowEmptyPass: false, // ldap returns "true" by default if a password is empty
   attributesMap: { // optional
     user: {}, // optional
     group: {} // optional
@@ -68,6 +69,13 @@ default attribute set is:
 ```javascript
 [ 'dn', 'cn', 'sn', 'givenName', 'mail', 'memberOf' ]
 ```
+
+#### allowEmptyPass
+
+The LDAP protocol allows empty passwords by default. In the case of empty
+password it will return a "success" response for the `bind` operation. In almost
+all cases, you **do not** want this to happen. But there may be a rare case
+that you do, so this is left as an option.
 
 #### attributesMap.user
 

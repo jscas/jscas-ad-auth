@@ -27,6 +27,24 @@ suite('integration', function () {
       .catch(done)
   })
 
+  test('blank password', function blank (done) {
+    plugin.validate(config.user.username, '')
+      .then((result) => {
+        expect(result).to.be.false
+        done()
+      })
+      .catch(done)
+  })
+
+  test('null password', function blank (done) {
+    plugin.validate(config.user.username, null)
+      .then((result) => {
+        expect(result).to.be.false
+        done()
+      })
+      .catch(done)
+  })
+
   test('missing user', function missing (done) {
     plugin.validate('nope', '123456')
       .then((result) => {

@@ -10,6 +10,7 @@ let config
 let log
 
 const configSchema = Joi.object().keys({
+  allowEmptyPass: Joi.boolean().default(false),
   ad: Joi.object().keys({
     searchUser: Joi.string().required(),
     searchUserPass: Joi.string().required(),
@@ -53,6 +54,10 @@ function remapGroupNames (map, groups) {
 function validate (username, password) {
   log.trace('validating user: %s', username)
   return Promise.coroutine(function * validator () {
+    if (config.allowEmptyPass === false) {
+      if (password === null || password === undefined) return false
+      if (password.length === 0) return false
+    }
     ad = new AD(config.ad)
     yield ad.bind()
     const isValid = yield ad.authenticate(username, password)
