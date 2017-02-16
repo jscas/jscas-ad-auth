@@ -72,5 +72,15 @@ suite('plugin', function () {
       expect(result).to.not.contain('bar')
       done()
     })
+
+    test('remapos groups if member of only one group', function remapOneGroup (done) {
+      const input = 'foo'
+      const map = { foo: 'foobar' }
+      const result = plugin.internals.remapGroupNames(map, input)
+
+      expect(result).to.be.an.array
+      expect(result).to.contain('foobar')
+      done()
+    })
   })
 })

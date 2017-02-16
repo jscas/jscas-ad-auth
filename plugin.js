@@ -41,7 +41,7 @@ function remapAttributes (map, user) {
 
 function remapGroupNames (map, groups) {
   const result = []
-  const _groups = groups.slice(0)
+  const _groups = (Array.isArray(groups)) ? groups.slice(0) : [groups]
   for (let k of Object.keys(map)) {
     if (_groups.indexOf(k) !== -1) {
       result.push(map[k])
