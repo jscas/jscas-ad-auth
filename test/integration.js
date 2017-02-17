@@ -1,86 +1,95 @@
 'use strict'
-/* eslint-env node, mocha */
 
 const path = require('path')
-const expect = require('chai').expect
+const test = require('tap').test
 
 const config = require(path.join(__dirname, '..', 'testconfig'))
 const adauth = require(path.join(__dirname, '..', 'plugin'))
 
-function noop () {}
-const logger = {
-  trace: noop,
-  debug: noop,
-  error: noop,
-  info: noop
-}
-logger.child = () => logger
-const plugin = adauth.plugin(config.plugin, {logger})
+test('validates credentials', (t) => {
+  t.plan(1)
+  adauth.plugin(config.plugin, {})
+    .then((plugin) => {
+      plugin.validate(config.user.username, config.user.password)
+        .then((result) => {
+          t.is(result, true)
+        })
+        .catch((err) => t.threw(err))
+    })
+  .catch((err) => t.threw(err))
+})
 
-suite('integration', function () {
-  test('validate credentials', function find (done) {
-    plugin.validate(config.user.username, config.user.password)
-      .then((result) => {
-        expect(result).to.be.true
-        done()
-      })
-      .catch(done)
-  })
+test('returns false for blank password', (t) => {
+  t.plan(1)
+  adauth.plugin(config.plugin, {})
+    .then((plugin) => {
+      plugin.validate(config.user.username, '')
+        .then((result) => {
+          t.is(result, false)
+        })
+        .catch((err) => t.threw(err))
+    })
+    .catch((err) => t.threw(err))
+})
 
-  test('blank password', function blank (done) {
-    plugin.validate(config.user.username, '')
-      .then((result) => {
-        expect(result).to.be.false
-        done()
-      })
-      .catch(done)
-  })
+test('returns false for null password', (t) => {
+  t.plan(1)
+  adauth.plugin(config.plugin, {})
+    .then((plugin) => {
+      plugin.validate(config.user.username, null)
+        .then((result) => {
+          t.is(result, false)
+        })
+        .catch((err) => t.threw(err))
+    })
+    .catch((err) => t.threw(err))
+})
 
-  test('null password', function blank (done) {
-    plugin.validate(config.user.username, null)
-      .then((result) => {
-        expect(result).to.be.false
-        done()
-      })
-      .catch(done)
-  })
+test('returns false for missing user', (t) => {
+  t.plan(1)
+  adauth.plugin(config.plugin, {})
+    .then((plugin) => {
+      plugin.validate('nope', '123456')
+        .then((result) => {
+          t.is(result, false)
+        })
+        .catch((err) => t.threw(err))
+    })
+    .catch((err) => t.threw(err))
+})
 
-  test('missing user', function missing (done) {
-    plugin.validate('nope', '123456')
-      .then((result) => {
-        expect(result).to.be.false
-        done()
-      })
-      .catch(done)
-  })
+test('returns false for invalid username', (t) => {
+  t.plan(1)
+  adauth.plugin(config.plugin, {})
+    .then((plugin) => {
+      plugin.validate(config.user.junkname, config.user.password)
+        .then((result) => {
+          t.is(result, false)
+        })
+        .catch((err) => t.threw(err))
+    })
+    .catch((err) => t.threw(err))
+})
 
-  test('invalid username', function invalidUsername (done) {
-    plugin.validate(config.user.junkname, config.user.password)
-      .then((result) => {
-        expect(result).to.be.false
-        done()
-      })
-      .catch(done)
-  })
-
-  test('get attributes', function attrs (done) {
-    adauth.postInit()
-      .then((res) => {
-        res.hooks.userAttributes(config.user.username)
-          .then((res) => {
-            expect(res).to.be.an.object
-            expect(res.extraAttributes).to.exist
-
-            const attrs = res.extraAttributes
-            expect(attrs.dn).to.contain(config.user.username)
-            expect(attrs.memberOf).to.exist
-            expect(attrs.memberOf).to.be.an.array
-            expect(attrs.memberOf.length).to.be.gt(0)
-
-            done()
-          })
-          .catch(done)
-      })
-      .catch(done)
-  })
+test('gets attributes for a user', (t) => {
+  t.plan(7)
+  adauth.plugin(config.plugin, {})
+    .then(() => {
+      adauth.postInit()
+        .then((res) => {
+          res.hooks.userAttributes(config.user.username)
+            .then((res) => {
+              t.type(res, Object)
+              t.is(res.hasOwnProperty('extraAttributes'), true)
+              t.is(res.extraAttributes.hasOwnProperty('dn'), true)
+              t.is(res.extraAttributes.dn.indexOf(config.user.username) > -1, true)
+              t.is(res.standardAttributes.hasOwnProperty('memberOf'), true)
+              t.type(res.standardAttributes.memberOf, Array)
+              t.is(res.standardAttributes.memberOf.length > 0, true)
+            })
+            .catch((err) => t.threw(err))
+        })
+        .catch((err) => t.threw(err))
+    })
+    .catch((err) => t.threw(err))
 })

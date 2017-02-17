@@ -4,8 +4,9 @@
   "description": "An Active Directory authentication provider for cas-server",
   "main": "plugin.js",
   "scripts": {
-    "lint": "gulp lint",
-    "test": "gulp test"
+    "lint": "standard",
+    "test": "tap --no-cov 'test/**/*.test.js'",
+    "integration": "tap --no-cov test/integration.js"
   },
   "precommit": [
     "lint",
@@ -28,6 +29,7 @@
   "bugs": "https://github.com/jscas/jscas-ad-auth/issues",
   "homepage": "https://github.com/jscac/jscas-ad-auth",
   "dependencies": {
+    "abstract-logging": "^1.0.0",
     "adldap": "^2.0.0",
     "bluebird": "^3.4.7",
     "bluebird-co": "^2.1.2",
@@ -35,13 +37,9 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "gulp": "^3.9.1",
-    "gulp-istanbul": "^1.0.0",
-    "gulp-load-plugins": "^1.2.4",
-    "gulp-mocha": "^3.0.0",
-    "gulp-standard": "^8.0.3",
-    "istanbul": "^0.4.4",
     "mocha": "^3.2.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "standard": "^8.6.0",
+    "tap": "^10.1.1"
   }
 }
