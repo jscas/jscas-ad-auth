@@ -5,7 +5,6 @@ require('bluebird-co')
 
 const Joi = require('joi')
 let AD
-let ad
 let config
 let log = require('abstract-logging')
 
@@ -62,12 +61,18 @@ function validate (username, password) {
       if (password === null || password === undefined) return false
       if (password.length === 0) return false
     }
-    ad = new AD(config.ad)
-    yield ad.bind()
-    const isValid = yield ad.authenticate(username, password)
-    log.trace('credential validation result: %s', isValid)
-    yield ad.unbind()
-    return isValid
+    try {
+      const ad = new AD(config.ad)
+      yield ad.bind()
+      const isValid = yield ad.authenticate(username, password)
+      log.trace('credentials validation result: %s', isValid)
+      yield ad.unbind()
+      return isValid
+    } catch (e) {
+      log.error('could not validate credentials: %s', e.message)
+      log.debug(e.stack)
+      throw e
+    }
   })()
 }
 
