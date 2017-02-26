@@ -30,7 +30,7 @@
   "homepage": "https://github.com/jscac/jscas-ad-auth",
   "dependencies": {
     "abstract-logging": "^1.0.0",
-    "adldap": "^2.0.0",
+    "adldap": "^3.0.0",
     "bluebird": "^3.4.7",
     "bluebird-co": "^2.1.2",
     "joi": "^10.2.2"
@@ -38,6 +38,6 @@
   "devDependencies": {
     "pre-commit": "^1.2.2",
     "standard": "^8.6.0",
-    "tap": "^10.1.1"
+    "tap": "^10.2.1"
   }
 }
