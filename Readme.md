@@ -1,7 +1,9 @@
 # jscas-ad-auth
 
 This module is an authentication plugin for [cas-server][cs]. It provides a
-means to authenticate users against an Active Directory instance.
+means to authenticate users against an Active Directory instance. It also
+provides a `userAttributes` hook to return attributes for a user during
+service validation.
 
 [cs]: https://github.com/jscas/cas-server/
 
@@ -23,20 +25,17 @@ The module requires a configuration object matching:
     }
   },
   allowEmptyPass: false, // ldap returns "true" by default if a password is empty
-  attributesMap: { // optional
-    user: {}, // optional
-    group: {} // optional
-  }
+  attributesMap: {} // optional
 }
 ```
 
 ### ad
 
 The `ad` property defines the configuration that will be passed to the
-underlying [Active Directory module][admod]. This configuration is supplied
-to the AD module as-is.
+underlying [adldap module][admod]. This configuration is supplied
+to the `adldap` module as-is.
 
-[admod]: https://www.npmjs.com/package/activedirectory
+[admod]: https://www.npmjs.com/package/adldap
 
 #### ad.searchUser
 
@@ -77,7 +76,7 @@ password it will return a "success" response for the `bind` operation. In almost
 all cases, you **do not** want this to happen. But there may be a rare case
 that you do, so this is left as an option.
 
-#### attributesMap.user
+#### attributesMap
 
 Allows you to rename the attributes returned in user searches. It should be
 an object where keys are the AD names and values are the new names. For example:
@@ -90,10 +89,6 @@ an object where keys are the AD names and values are the new names. For example:
 
 will rename the `sAMAccountName` property to `firstName` and leave all other
 property names alone.
-
-#### attributesMap.group
-
-Same as `attributesMap.user` but for group names.
 
 ## License
 

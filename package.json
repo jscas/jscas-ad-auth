@@ -4,8 +4,10 @@
   "description": "An Active Directory authentication provider for cas-server",
   "main": "plugin.js",
   "scripts": {
-    "lint": "standard",
+    "lint": "standard | snazzy",
+    "lint-ci": "standard",
     "test": "tap --no-cov 'test/**/*.test.js'",
+    "test-ci": "tap --cov 'test/**/*.test.js'",
     "integration": "tap --no-cov test/integration.js"
   },
   "precommit": [
@@ -29,15 +31,17 @@
   "bugs": "https://github.com/jscas/jscas-ad-auth/issues",
   "homepage": "https://github.com/jscac/jscas-ad-auth",
   "dependencies": {
-    "abstract-logging": "^1.0.0",
-    "adldap": "^3.0.1",
-    "bluebird": "^3.5.0",
-    "bluebird-co": "^2.1.2",
-    "joi": "^10.2.2"
+    "adldap": "^3.1.4",
+    "conflate": "^1.4.0",
+    "fastify-plugin": "^0.2.1"
   },
   "devDependencies": {
+    "abstract-logging": "^1.0.0",
+    "fastify": "^0.38.0",
+    "mock-require": "^2.0.2",
     "pre-commit": "^1.2.2",
-    "standard": "^9.0.0",
-    "tap": "^10.3.0"
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3",
+    "tap": "^11.0.1"
   }
 }
