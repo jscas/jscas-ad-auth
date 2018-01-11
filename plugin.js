@@ -77,7 +77,7 @@ module.exports = fp(function adldapPlugin (server, options, next) {
   try {
     if (!options || !isObject(options)) throw Error('missing configuration object')
     validateConfig(options)
-    config = conflate({}, defaultConfig, config)
+    config = conflate({}, defaultConfig, options)
   } catch (e) {
     log.error('jscas-ad-auth: invalid configuration: %s', e.message)
     log.debug(e.stack)
