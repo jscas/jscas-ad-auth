@@ -47,9 +47,9 @@ test('constructor rejects if missing required properties', (t) => {
   t.test('ldapjs url', (t) => {
     t.plan(2)
     const conf = {
-      searchUser: 'foo',
-      searchUserPass: 'bar',
       ad: {
+        searchUser: 'foo',
+        searchUserPass: 'bar',
         ldapjs: {}
       }
     }
@@ -62,9 +62,9 @@ test('constructor rejects if missing required properties', (t) => {
   t.test('ldapjs search base', (t) => {
     t.plan(2)
     const conf = {
-      searchUser: 'foo',
-      searchUserPass: 'bar',
       ad: {
+        searchUser: 'foo',
+        searchUserPass: 'bar',
         ldapjs: {
           url: 'foo'
         }

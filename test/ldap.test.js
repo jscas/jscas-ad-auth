@@ -6,9 +6,9 @@ const fastify = require('fastify')
 const plugin = require('../')
 
 const config = {
-  searchUser: 'foo',
-  searchUserPass: '123456',
   ad: {
+    searchUser: 'foo',
+    searchUserPass: '123456',
     ldapjs: {
       url: 'ldaps://ldap.example.com',
       searchBase: 'dc=ldap,dc=example,dc=com'

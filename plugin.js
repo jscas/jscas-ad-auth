@@ -60,7 +60,7 @@ function validateConfig (config) {
   if (!config.ad.ldapjs || !isObject(config.ad.ldapjs)) {
     throw Error('missing ldapjs config object')
   }
-  if (!config.searchUser || !config.searchUserPass) {
+  if (!config.ad.searchUser || !config.ad.searchUserPass) {
     throw Error('missing search user credentials')
   }
   if (!config.ad.ldapjs.url) {
