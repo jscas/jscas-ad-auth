@@ -34,10 +34,6 @@ test('credential validations', (t) => {
     .decorate('registerAuthenticator', function (obj) {
       this.jscasPlugins.auth.push(obj)
     })
-    .decorate('jscasHooks', {userAttributes: []})
-    .decorate('registerHook', function (name, fn) {
-      this.jscasHooks[name].push(fn)
-    })
     .register(plugin, config)
 
   return server.listen(0)
@@ -96,48 +92,4 @@ test('credential validations', (t) => {
       })
     })
     .catch(t.threw)
-})
-
-test('returns user attributes', (t) => {
-  t.plan(2)
-  mockquire('adldap', function () {
-    return function () {
-      return {
-        findUser: async (username) => {
-          t.is(username, 'foo')
-          return {
-            sAMAccountName: 'foo'
-          }
-        },
-        bind: async () => {},
-        unbind: async () => {}
-      }
-    }
-  })
-
-  t.tearDown(() => mockquire.stopAll())
-
-  const server = fastify()
-  server
-    .decorate('jscasPlugins', {auth: []})
-    .decorate('registerAuthenticator', function (obj) {
-      this.jscasPlugins.auth.push(obj)
-    })
-    .decorate('jscasHooks', {userAttributes: []})
-    .decorate('registerHook', function (name, fn) {
-      this.jscasHooks[name].push(fn)
-    })
-    .register(plugin, config)
-
-  server.listen(0, (err) => {
-    if (err) t.threw(err)
-    server.server.unref()
-    server.jscasHooks.userAttributes[0]('foo')
-      .then((result) => {
-        t.strictDeepEqual(result, {
-          sAMAccountName: 'foo'
-        })
-      })
-      .catch(t.threw)
-  })
 })
