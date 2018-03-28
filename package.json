@@ -1,6 +1,6 @@
 {
   "name": "jscas-ad-auth",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "An Active Directory authentication provider for cas-server",
   "main": "plugin.js",
   "scripts": {
