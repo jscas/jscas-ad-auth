@@ -1,7 +1,7 @@
 {
   "name": "jscas-ad-auth",
   "version": "2.0.0-rc.2",
-  "description": "An Active Directory authentication provider for cas-server",
+  "description": "An Active Directory authentication provider for jscas-server",
   "main": "plugin.js",
   "scripts": {
     "lint": "standard | snazzy",
@@ -16,8 +16,7 @@
   ],
   "keywords": [
     "cas",
-    "cas-server",
-    "cas-server-plugin",
+    "jscas",
     "apereo",
     "jasig",
     "activedirectory"
